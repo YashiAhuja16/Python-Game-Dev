@@ -21,7 +21,7 @@ def draw():
     elif game_complete: 
         display_message("YOU WON", "WELL DONE")
     else: 
-        for item in items: 
+        for item in items:  
             item.draw()
 
 def update(): 
@@ -36,6 +36,7 @@ def create_items(items_to_create):
         new_items.append(item)
     return new_items
 def make_items(number_of_extra_items):
+    print(number_of_extra_items)
     items_to_create = get_option_to_create(number_of_extra_items)
     new_items = create_items(items_to_create) 
     layout_items(new_items)
@@ -46,7 +47,7 @@ def get_option_to_create(number_of_extra_items):
     for i in range(0,number_of_extra_items): 
         random_option = random.choice(ITEMS) 
         items_to_create.append(random_option)
-        return items_to_create 
+    return items_to_create 
 def layout_items(items_to_layout):
     number_of_gaps = len(items_to_layout) +1 
     gap_size = WIDTH / number_of_gaps 
@@ -65,11 +66,34 @@ def handle_game_over():
     global game_over 
     game_over = True 
 def stop_animation(animations_to_stop):
-    for animation in animations_to_stop:
-        if animation.stop(): 
+   for animation in animations_to_stop:
+        if animation.running: 
+            animation.stop()  
+            
 def on_mouse_down(pos):
     global items, current_level 
     for item in items: 
+        if item.collidepoint(pos):
+            if "paper_bag" in item.image:
+                handle_game_complete()
+            else: 
+                handle_game_over()
+def handle_game_complete():
+    global items, current_level, animations, game_complete
+    stop_animation(animations)
+    if current_level == final_level: 
+        game_complete = True 
+    else: 
+        current_level += 1 
+        items = []
+        animations = []
+def display_message(heading_text, subheading_text):
+    screen.draw.text(heading_text, fontsize = 60, center = center, color = "white")
+    screen.draw.text(subheading_text, fontsize = 30, center = (400,330), color = "white")
+
+    
+
+
         
 
 
