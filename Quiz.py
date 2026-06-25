@@ -3,7 +3,7 @@ import pgzrun
 WIDTH = 870
 HEIGHT = 650
 
-question_file = "questions.txt" 
+question_file = "Quizmaster/questions.txt" 
 marquee_message = "" 
 score = 0
 time_left = 10 
@@ -41,12 +41,20 @@ def draw():
     screen.draw.filled_rect(skip_box, "darkgreen")
     screen.draw.filled_rect(timer_box, "navyblue")
     marquee_message = "Welcome to Quizmaster!"
+
+    marquee_message = marquee_message + f"Q:{question_index} of {question_count}"
+    
     skip_message = "Skip"
     screen.draw.textbox(marquee_message,marquee_box, color = "white")
     screen.draw.textbox(str(time_left),timer_box,color = "white")
     screen.draw.textbox(skip_message, skip_box, color = "white", angle = -90)
-    screen.draw.textbox(questions(0), question_box, color = "white") 
-
+    screen.draw.textbox(questions[0].strip(), question_box, color = "white") 
+    index = 1
+    for answer_box in answer_boxes: 
+        screen.draw.textbox(questions[index].strip(), answer_box, color = "white" ) 
+        index = index + 1 
+def update(): 
+    move_marquee()
 
 
 def read_questionfile(): 
@@ -57,8 +65,17 @@ def read_questionfile():
         questions.append(question)
         question_count = question_count + 1 
     q_file.close()
+def move_marquee():
+    marquee_box.x = marquee_box.x - 2
+    if marquee_box.right < 0: 
+        marquee_box.left = WIDTH 
 
 
 
 
+
+
+
+
+read_questionfile()
 pgzrun.go()
